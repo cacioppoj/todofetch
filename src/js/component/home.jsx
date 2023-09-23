@@ -39,9 +39,9 @@ const Home = () => {
       const data = await response.json();
 
       if (data.result === "ok") {
-        alert("To Do Creado");
+        alert(data.msg);
       } else {
-        alert("Error de api");
+        alert(data.msg);
       }
     } catch (error) {
       console.error("Error:", error);
@@ -49,7 +49,6 @@ const Home = () => {
     }
   };
   const syncTareas = (updatedTareas) => {
-    console.log(updatedTareas);
     fetch(API_URL, {
       method: "PUT",
       body: JSON.stringify(updatedTareas),
@@ -65,23 +64,24 @@ const Home = () => {
       .catch((error) => console.error("Error actualizando data:", error));
   };
 
-  const createUser = () => {
-    fetch(API_URL, {
-      method: "POST",
-      body: [],
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => {
-        if (!response.ok) throw new Error("Error");
-        return response.json();
-      })
-      .then((data) => setlistToDo(data))
-      .catch((error) => console.error("Error actualizando data:", error));
-  };
+  // const createUser = () => {
+  //   fetch(API_URL, {
+  //     method: "POST",
+  //     body: [],
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //   })
+  //     .then((response) => {
+  //       if (!response.ok) throw new Error("Error");
+  //       return response.json();
+  //     })
+  //     .then((data) => setlistToDo(data))
+  //     .catch((error) => console.error("Error actualizando data:", error));
+  // };
 
   const handleAddTodo = (e) => {
+    console.log(listToDo);
     e.preventDefault();
     if (text.trim()) {
       if (editIndex !== null) {
@@ -150,23 +150,13 @@ const Home = () => {
     <>
       <div className="container d-flex flex-column">
         <div className="d-flex justify-content-end mb-3">
-          <Form>
-            <Form.Group controlId="formBasicUsername">
-              <Form.Label>Username:</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter Username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-              />
-            </Form.Group>
-            <Button
-              onClick={handleCreateUserTodoList}
-              className="btn btn-primary mt-2"
-            >
-              Crear Todo List
-            </Button>
-          </Form>
+          {" "}
+          <Button
+            onClick={handleCreateUserTodoList}
+            className="btn btn-primary mt-2"
+          >
+            Crear Todo List
+          </Button>
         </div>
       </div>
 
