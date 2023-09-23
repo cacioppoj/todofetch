@@ -21,9 +21,13 @@ const Home = () => {
         "Content-Type": "application/json",
       },
     })
-      .then((response) => response.json())
+      .then((response) => {
+        console.log(response);
+        if (!response.ok) throw new Error(response.json().msg);
+        return response.json();
+      })
       .then((data) => setlistToDo(data))
-      .catch((error) => console.log("Error"));
+      .catch((error) => console.log(error));
   }, []);
 
   const handleCreateUserTodoList = async () => {
@@ -43,9 +47,11 @@ const Home = () => {
       } else {
         alert(data.msg);
       }
+
+      window.location.reload();
     } catch (error) {
-      console.error("Error:", error);
-      alert("Error");
+      console.error("Error creando usuario:", error);
+      alert("Error creando usuario:");
     }
   };
   const syncTareas = (updatedTareas) => {
@@ -57,11 +63,11 @@ const Home = () => {
       },
     })
       .then((response) => {
-        if (!response.ok) throw new Error("Error");
+        if (!response.ok) throw new Error(response.json().msg);
         return response.json();
       })
       .then((data) => alert(data.msg))
-      .catch((error) => console.error("Error actualizando data:", error));
+      .catch((error) => alert("Error sincronizando por favor crea el usuario"));
   };
 
   // const createUser = () => {
@@ -134,14 +140,12 @@ const Home = () => {
 
       const data = await response.json();
 
-      if (data.result === "ok") {
+      if (response.ok) {
         setlistToDo([]);
-        alert("Todas las tareas del usuario han sido borradas exitosamente.");
-      } else {
-        alert("Hubo un error al intentar borrar las tareas.");
       }
+      alert(data.msg);
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error borrando todo:", error);
       alert("Hubo un error al intentar borrar las tareas.");
     }
   };
